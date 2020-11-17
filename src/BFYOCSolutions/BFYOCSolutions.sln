@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30621.155
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BFYOCSolutions", "BFYOCSolutions.csproj", "{684BC830-DB0F-4DF7-A5F4-50363E393099}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{684BC830-DB0F-4DF7-A5F4-50363E393099}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{684BC830-DB0F-4DF7-A5F4-50363E393099}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{684BC830-DB0F-4DF7-A5F4-50363E393099}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{684BC830-DB0F-4DF7-A5F4-50363E393099}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EB69C1EB-F94A-4E90-9870-000437667D5F}
+	EndGlobalSection
+EndGlobal
