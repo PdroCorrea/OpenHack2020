@@ -17,7 +17,11 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
-  
+
+- task: UseDotNet@2
+  inputs:
+    version: '3.1.x'
+    packageType: runtime  
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
@@ -28,11 +32,14 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: false
+    projects: '**/*.csproj'
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: True
     
 - task: AzureFunctionApp@1
   inputs:
     azureSubscription: 'OTA-Prod-56(3f415f48-081e-4581-a7ba-993eb30c75c4)'
     appType: 'functionApp'
     appName: 'FunctionAppHack4p'
-    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
     deploymentMethod: 'auto'
