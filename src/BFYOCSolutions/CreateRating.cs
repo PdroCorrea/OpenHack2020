@@ -12,6 +12,7 @@ using Functions.Users;
 using System.Net.Http;
 using System.Net;
 using System.Text;
+using BFYOCSolutions.Products;
 
 /* Challenge #3
     POST Azure Function
@@ -91,6 +92,17 @@ namespace BFYOCSolutions
                     return req.CreateErrorResponse(HttpStatusCode.NotFound, e);
                 }
 
+                try
+                {
+                    await ProductsApi.GetProductByIdAsync(data.productId);
+                }
+                catch (Exception e)
+                {
+                    return req.CreateErrorResponse(HttpStatusCode.NotFound, e);
+                }
+
+                //await document.AddAsync(output);
+                return req.CreateResponse(HttpStatusCode.OK, output);
                 await document.AddAsync(output);
                 // return req.CreateResponse(HttpStatusCode.OK, "ok");
                 return new HttpResponseMessage(HttpStatusCode.OK)
