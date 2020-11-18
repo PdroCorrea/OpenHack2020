@@ -2,8 +2,10 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AzureFunctionsVersion>v3</AzureFunctionsVersion>
+    <UserSecretsId>d93f1f6c-a98d-453c-b994-f783b741adf5</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Properties\ServiceDependencies\local\cosmosdb1.arm.json" />
     <None Remove="Users\NewFile1.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -18,5 +20,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\ServiceDependencies\local\" />
   </ItemGroup>
 </Project>
