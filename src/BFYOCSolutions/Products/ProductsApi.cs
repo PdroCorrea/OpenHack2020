@@ -9,7 +9,7 @@ namespace BFYOCSolutions.Products
 {
     class ProductsApi
     {
-        private const string BaseUrl = "https://serverlessohuser.trafficmanager.net/api/";
+        private const string BaseUrl = "https://serverlessohproduct.trafficmanager.net/api/";
 
         public static async Task<Product> GetProductByIdAsync(Guid productId)
         {
