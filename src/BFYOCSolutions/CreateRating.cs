@@ -7,7 +7,10 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using BFYOCSolutions.Models;
+using BFYOCSolutions.Ratings;
+using Functions.Users;
+using System.Net.Http;
+using System.Net;
 
 /* Challenge #3
     POST Azure Function
@@ -33,11 +36,7 @@ using BFYOCSolutions.Models;
 
     TODO
     1) Validate userId and productId with external api
-    2) Add Id : GUID
-    3) Add timestamp (DateTime UTC)
-    4) Validation for rating 0-5
     5) Use a data service to store the ratings information to the backend
-    6) Return JSON payload with generated id and timestamp
 
  */
 
@@ -47,24 +46,53 @@ namespace BFYOCSolutions
     public static class CreateRating
     {
         [FunctionName("CreateRating")]
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
+        public static async Task<HttpResponseMessage> Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage req,
+            [CosmosDB(databaseName: "BFYOC", collectionName: "Ratings", ConnectionStringSetting = "CosmosDBConnection")] IAsyncCollector<RatingOutputPayload> document,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            try
+            {
+                log.LogInformation("C# HTTP trigger function processed a request.");
 
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                RatingInputPayload data = JsonConvert.DeserializeObject<RatingInputPayload>(await req.Content.ReadAsStringAsync());
 
-            RatingInputPayload data = (RatingInputPayload)JsonConvert.DeserializeObject(requestBody);
+                // Validate the rating: must be 0-5
+                if (data.rating < 0 || data.rating > 5)
+                {
+                    string invalidRatingMessage = "You have entered an invalid rating number. Please enter a number from 0-5";
+                    return req.CreateErrorResponse(HttpStatusCode.BadRequest, invalidRatingMessage);
+                }
 
+                // map the request body to the Rating Output payload if rating is valid
+                RatingOutputPayload output = new RatingOutputPayload()
+                {
+                    id = Guid.NewGuid(),
+                    userId = data.userId,
+                    productId = data.productId,
+                    timestamp = DateTime.UtcNow,
+                    locationName = data.locationName,
+                    rating = data.rating,
+                    userNotes = data.userNotes
+                };
 
+                try
+                {
+                    await UserApi.GetUserByIdAsync(data.userId);
+                }
+                catch (Exception e)
+                {
+                    return req.CreateErrorResponse(HttpStatusCode.NotFound, e);
+                }
 
-            string responseMessage = string.IsNullOrEmpty(null)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, . This HTTP triggered function executed successfully.";
-
-            return new OkObjectResult(responseMessage);
+                await document.AddAsync(output);
+                return req.CreateResponse(HttpStatusCode.OK, output);
+            }
+            catch (Exception ex)
+            {
+                return req.CreateResponse(HttpStatusCode.BadRequest, $"error saving to cosmos or whatever here check it => {ex.ToString()} ");
+            }
         }
     }
 }
