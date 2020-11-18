@@ -11,6 +11,7 @@ using BFYOCSolutions.Ratings;
 using Functions.Users;
 using System.Net.Http;
 using System.Net;
+using System.Text;
 
 /* Challenge #3
     POST Azure Function
@@ -62,7 +63,11 @@ namespace BFYOCSolutions
                 if (data.rating < 0 || data.rating > 5)
                 {
                     string invalidRatingMessage = "You have entered an invalid rating number. Please enter a number from 0-5";
-                    return req.CreateErrorResponse(HttpStatusCode.BadRequest, invalidRatingMessage);
+                    //return req.CreateErrorResponse(HttpStatusCode.BadRequest, invalidRatingMessage);
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest)
+                    {
+                        Content = new StringContent(JsonConvert.SerializeObject(invalidRatingMessage), Encoding.UTF8, "application/json"),
+                    };
                 }
 
                 // map the request body to the Rating Output payload if rating is valid
@@ -87,11 +92,20 @@ namespace BFYOCSolutions
                 }
 
                 await document.AddAsync(output);
-                return req.CreateResponse(HttpStatusCode.OK, output);
+                // return req.CreateResponse(HttpStatusCode.OK, "ok");
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(output), Encoding.UTF8, "application/json"),
+                };
+                
             }
             catch (Exception ex)
             {
-                return req.CreateResponse(HttpStatusCode.BadRequest, $"error saving to cosmos or whatever here check it => {ex.ToString()} ");
+                //return req.CreateResponse(HttpStatusCode.BadRequest, $"error saving to cosmos or whatever here check it => {ex.ToString()} ");
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject($"error saving to cosmos or whatever here check it => {ex.ToString()} "), Encoding.UTF8, "application/json"),
+                };
             }
         }
     }

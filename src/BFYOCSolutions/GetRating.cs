@@ -21,7 +21,7 @@ namespace BFYOCSolutions
                 collectionName: "Ratings",
                 ConnectionStringSetting = "CosmosDBConnection",
                 Id = "{id}",
-                PartitionKey = "{partitionKey}")] RatingOutputPayload rating,
+                 PartitionKey = "{id}")] RatingOutputPayload rating,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
@@ -34,7 +34,7 @@ namespace BFYOCSolutions
             {
                 log.LogInformation($"Found Rating item, User ID={rating.userId}");
             }
-            return new OkResult();
+            return new OkObjectResult(rating);
         }
     }
 }
