@@ -21,7 +21,7 @@ namespace BFYOCSolutions
                 databaseName: "BFYOC",
                 collectionName: "Ratings",
                 ConnectionStringSetting = "CosmosDBConnection",
-                SqlQuery = "SELECT top 2 * FROM Rating")]
+                SqlQuery = "SELECT top 2 * FROM Ratings")]
                 IEnumerable<RatingOutputPayload> ratings,
             ILogger log)
         {
