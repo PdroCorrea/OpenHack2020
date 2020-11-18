@@ -89,7 +89,10 @@ namespace BFYOCSolutions
                 }
                 catch (Exception e)
                 {
-                    return req.CreateErrorResponse(HttpStatusCode.NotFound, e);
+                    return new HttpResponseMessage(HttpStatusCode.NotFound)
+                    {
+                        Content = new StringContent(JsonConvert.SerializeObject(e), Encoding.UTF8, "application/json"),
+                    };
                 }
 
                 try
@@ -98,13 +101,14 @@ namespace BFYOCSolutions
                 }
                 catch (Exception e)
                 {
-                    return req.CreateErrorResponse(HttpStatusCode.NotFound, e);
+                    return new HttpResponseMessage(HttpStatusCode.NotFound)
+                    {
+                        Content = new StringContent(JsonConvert.SerializeObject(e), Encoding.UTF8, "application/json"),
+                    };
                 }
 
                 //await document.AddAsync(output);
-                return req.CreateResponse(HttpStatusCode.OK, output);
                 await document.AddAsync(output);
-                // return req.CreateResponse(HttpStatusCode.OK, "ok");
                 return new HttpResponseMessage(HttpStatusCode.OK)
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(output), Encoding.UTF8, "application/json"),
