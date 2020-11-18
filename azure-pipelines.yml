@@ -23,6 +23,12 @@ steps:
     command: 'build'
     #projects: '/src/BFYOCSolutions/BFYOCSolutions.sln'
     projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    
 - task: AzureFunctionApp@1
   inputs:
     azureSubscription: 'OTA-Prod-56(3f415f48-081e-4581-a7ba-993eb30c75c4)'
