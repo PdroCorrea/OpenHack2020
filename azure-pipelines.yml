@@ -32,6 +32,9 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: false
+    projects: '**/*.csproj'
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: True
     
 - task: AzureFunctionApp@1
   inputs:
