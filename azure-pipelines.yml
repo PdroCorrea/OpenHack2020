@@ -18,6 +18,10 @@ steps:
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
   
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '/src/BFYOCSolutions/BFYOCSolutions.sln'
 - task: AzureFunctionApp@1
   inputs:
     azureSubscription: 'OTA-Prod-56(3f415f48-081e-4581-a7ba-993eb30c75c4)'
